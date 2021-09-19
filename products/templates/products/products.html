@@ -1,5 +1,6 @@
 {% extends 'products/template_basic.html' %}
 {% load static %}
+{% spaceless %}
 
 {% block css %}
     <link href="{% static '/css/products.css' %}" rel="stylesheet">
@@ -107,3 +108,4 @@
     <!-- /.container -->
 </footer>
 {% endblock %}
+{% endspaceless %}

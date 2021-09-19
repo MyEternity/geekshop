@@ -1,6 +1,6 @@
 {% extends 'products/template_basic.html' %}
 {% load static %}
-
+{% spaceless %}
 {% block css %}
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
 {% endblock %}
@@ -25,3 +25,4 @@
         </div>
     </section>
 {% endblock %}
+{% endspaceless %}
