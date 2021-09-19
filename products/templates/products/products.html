@@ -1,6 +1,5 @@
 {% extends 'products/template_basic.html' %}
 {% load static %}
-{% spaceless %}
 
 {% block css %}
     <link href="{% static '/css/products.css' %}" rel="stylesheet">
@@ -15,21 +14,19 @@
 
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
-                <a href="#" class="list-group-item">Новинки</a>
-                <a href="#" class="list-group-item">Одежда</a>
-                <a href="#" class="list-group-item">Обувь</a>
-                <a href="#" class="list-group-item">Аксессуары</a>
-                <a href="#" class="list-group-item">Подарки</a>
+                    {% for item in categories %}
+                        <a href="{% url 'products:index' %}{{ item.id }}" class="list-group-item">{{ item.name }}</a>
+                    {% endfor %}
+                </div>
+
             </div>
+            <!-- /.col-lg-3 -->
 
-        </div>
-        <!-- /.col-lg-3 -->
+            <div class="col-lg-9">
 
-        <div class="col-lg-9">
-
-            <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                 </ol>
@@ -108,4 +105,3 @@
     <!-- /.container -->
 </footer>
 {% endblock %}
-{% endspaceless %}
