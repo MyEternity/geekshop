@@ -9,7 +9,7 @@ from django.db import models
 class ProductCategory(models.Model):
     name = models.CharField(max_length=64, unique=True, default='')
     description = models.TextField(blank=True)
-    date_added = models.DateTimeField(default=datetime.datetime.now())
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -22,7 +22,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     quantity = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    date_added = models.DateTimeField(default=datetime.datetime.now())
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'[{self.category.name}] : {self.name}'

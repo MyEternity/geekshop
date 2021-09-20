@@ -10,8 +10,7 @@ SITE_TITLE = 'geeks'
 
 def index(request):
     context = {
-        'title': SITE_TITLE,
-        'current_date': datetime.datetime.now().strftime("%d/%m/%Y")
+        'title': SITE_TITLE
     }
     return render(request, 'products/index.html', context)
 
@@ -23,7 +22,6 @@ def products(request, code=None):
         selected_products = Product.objects.filter(category_id=code)
     context = {
         'title': f'{SITE_TITLE}: Каталог',
-        'current_date': datetime.datetime.now().strftime("%d/%m/%Y"),
         'products': selected_products,
         'categories': ProductCategory.objects.all()
     }
