@@ -10,8 +10,8 @@ class UserLoginForm(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(UserLoginForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'Введите имя пользователя:'
-        self.fields['password'].widget.attrs['placeholder'] = 'Введите пароль:'
+        self.fields['username'].widget.attrs['placeholder'] = 'Имя пользователя'
+        self.fields['password'].widget.attrs['placeholder'] = 'Пароль'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
@@ -19,12 +19,15 @@ class UserLoginForm(AuthenticationForm):
 class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super(UserRegisterForm, self).__init__(*args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'Введите имя пользователя:'
-        self.fields['password1'].widget.attrs['placeholder'] = 'Введите пароль:'
-        self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль:'
+        self.fields['first_name'].widget.attrs['placeholder'] = 'Иван'
+        self.fields['last_name'].widget.attrs['placeholder'] = 'Иванов'
+        self.fields['username'].widget.attrs['placeholder'] = 'Имя пользователя'
+        self.fields['email'].widget.attrs['placeholder'] = 'myemail@mail.ml'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Придумайте пароль'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
