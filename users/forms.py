@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from users.models import User
 
@@ -12,5 +12,19 @@ class UserLoginForm(AuthenticationForm):
         super(UserLoginForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['placeholder'] = 'Введите имя пользователя:'
         self.fields['password'].widget.attrs['placeholder'] = 'Введите пароль:'
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control py-4'
+
+
+class UserRegisterForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2')
+
+    def __init__(self, *args, **kwargs):
+        super(UserRegisterForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['placeholder'] = 'Введите имя пользователя:'
+        self.fields['password1'].widget.attrs['placeholder'] = 'Введите пароль:'
+        self.fields['password2'].widget.attrs['placeholder'] = 'Повторите пароль:'
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
