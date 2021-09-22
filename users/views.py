@@ -9,6 +9,7 @@ from users.forms import UserLoginForm, UserRegisterForm
 
 
 def login(request):
+    error_data = ''
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
@@ -20,11 +21,13 @@ def login(request):
                 return HttpResponseRedirect(reverse('index'))
         else:
             print(form.errors)
+            error_data = 'Что-то пошло не так, проверьте что все заполнено верно!'
     else:
         form = UserLoginForm()
     context = {
         'title': 'GS: Авторизация',
-        'form': form
+        'form': form,
+        'error_data': error_data
     }
     return render(request, 'users/login.html', context)
 

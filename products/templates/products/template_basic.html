@@ -39,8 +39,8 @@
                         {% else %}
                             {% if user.is_staff %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/admin.html">Администрирование <i
-                                            class="fas fa-staff-alt"></i></a>
+                                    <a class="nav-link" href="admin">{{ user.first_name }} <i
+                                            class="fas fa-user-alt"></i></a>
                                 </li>
                             {% endif %}
                             <li class="nav-item">
