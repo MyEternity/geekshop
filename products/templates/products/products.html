@@ -66,11 +66,10 @@
                                     </h5>
                                     <p class="card-text">{{ item.description }}</p>
                                 </div>
-                                {% if user.is_active %}
+                                {% if user.is_active and item.quantity > 0 %}
                                     <div class="card-footer text-center">
-                                        <a href="{% url 'basket:basket_add' %}" type="button"
-                                           class="btn btn-outline-success">Отправить
-                                            в корзину</a>
+                                        <a href="{% url 'basket:add' item.id %}" type="button"
+                                           class="btn btn-outline-success">В корзину</a>
                                     </div>
                                 {% else %}
                                     <div class="card-footer text-center">Зарегистрируйтесь</div>

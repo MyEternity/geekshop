@@ -1,4 +1,4 @@
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.shortcuts import render, HttpResponseRedirect
 from django.urls import reverse
 
@@ -35,7 +35,7 @@ def register(request):
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
-            # message.sucess(request, 'Вы успешно зарегистрировались!')
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('users:login'))
     else:
         form = UserRegisterForm(data=request.POST)
@@ -56,12 +56,14 @@ def profile(request):
         form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Данные успешно сохранены.')
             return HttpResponseRedirect(reverse('users:profile'))
-        else:
-            print(form.errors)
+    else:
+        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
     context = {
         'title': 'GS: Профиль',
         'form': UserProfileForm(instance=request.user),
-        'basket': Basket.objects.filter(user=request.user)
+        'basket': Basket.objects.filter(user=request.user),
+        'basket_total': sum(item.product.price * item.quantity for item in Basket.objects.filter(user=request.user))
     }
     return render(request, 'users/profile.html', context)
