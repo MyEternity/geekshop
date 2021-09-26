@@ -18,7 +18,7 @@ from .views import basket_add, basket_remove
 
 app_name = 'basket'
 
-urlpatterns = [
+urlpatterns = (
     path('basket_a/<int:product_id>', basket_add, name='basket_add'),
     path('basket_r/<int:product_id>', basket_remove, name='basket_remove')
-]
+)
