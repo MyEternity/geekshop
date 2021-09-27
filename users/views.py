@@ -50,6 +50,10 @@ def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
 
+def total_sale(self):
+    total = Basket.objects.aggregate(TOTAL = Sum('amount'))['TOTAL']
+    return total
+
 
 def profile(request):
     if request.method == 'POST':
@@ -66,6 +70,7 @@ def profile(request):
         'title': 'GS: Профиль',
         'form': form,
         'basket': Basket.objects.filter(user=request.user),
-        'basket_total': sum(item.product.price * item.quantity for item in Basket.objects.filter(user=request.user))
+        'basket_total': sum(item.product.price * item.quantity for item in Basket.objects.filter(user=request.user)),
+        'basket_wcount': sum(item.quantity for item in Basket.objects.filter(user=request.user)),
     }
     return render(request, 'users/profile.html', context)
