@@ -18,9 +18,7 @@
                                 {{ message }}
                             {% endfor %}
                         {% else %}
-                            {% for error in errors %}
-                                {{ error }}
-                            {% endfor %}
+                            {{ form.errors|escape }}
                         {% endif %}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -52,9 +50,9 @@
                     <div class="form-row mb-2">
                         <div class="col-lg-12">
                             <div class="custom-file">
-                                <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите
-                                    изображение</label>
+                                <label class="custom-file-label" for="{{ form.image.id_for_label }}">Выберите изображение</label>
                                 <input type="file" class="custom-file-input" id="userAvatar" size="50">
+{#                                {{ form.image }}#}
                             </div>
                         </div>
                     </div>

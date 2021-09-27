@@ -58,11 +58,13 @@ def profile(request):
             form.save()
             messages.success(request, 'Данные успешно сохранены.')
             return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
     else:
-        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        form = UserProfileForm(instance=request.user)
     context = {
         'title': 'GS: Профиль',
-        'form': UserProfileForm(instance=request.user),
+        'form': form,
         'basket': Basket.objects.filter(user=request.user),
         'basket_total': sum(item.product.price * item.quantity for item in Basket.objects.filter(user=request.user))
     }
