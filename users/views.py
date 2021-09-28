@@ -70,7 +70,5 @@ def profile(request):
         'title': 'GS: Профиль',
         'form': form,
         'basket': Basket.objects.filter(user=request.user),
-        'basket_total': sum(item.product.price * item.quantity for item in Basket.objects.filter(user=request.user)),
-        'basket_wcount': sum(item.quantity for item in Basket.objects.filter(user=request.user)),
     }
     return render(request, 'users/profile.html', context)
