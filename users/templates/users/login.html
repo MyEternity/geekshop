@@ -11,13 +11,9 @@
                         {% for message in messages %}
                             {{ message }}
                         {% endfor %}
-                        {% else %}
+                    {% else %}
                         {{ form.errors }}
-{#                    {% else %}#}
-{#                        {% for error in errors %}#}
-{#                            {{ error }}#}
-{#                        {% endfor %}#}
-#                    {% endif %}
+                    {% endif %}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
