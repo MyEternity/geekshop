@@ -1,15 +1,15 @@
+from django.contrib import auth, messages
 from django.shortcuts import render, HttpResponseRedirect
-from django.contrib import auth
 from django.urls import reverse
 
-from users.forms import UserLoginForm, UserRegisterForm
+from basket.models import Basket
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
 
 
 # Create your views here.
 
 
 def login(request):
-    error_data = ''
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
@@ -20,14 +20,12 @@ def login(request):
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
         else:
-            print(form.errors)
-            error_data = 'Что-то пошло не так, проверьте что все заполнено верно!'
+            form = UserLoginForm(data=request.POST)
     else:
         form = UserLoginForm()
     context = {
         'title': 'GS: Авторизация',
-        'form': form,
-        'error_data': error_data
+        'form': form
     }
     return render(request, 'users/login.html', context)
 
@@ -37,9 +35,8 @@ def register(request):
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print(form.errors)
     else:
         form = UserRegisterForm(data=request.POST)
     context = {
@@ -52,3 +49,28 @@ def register(request):
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+def total_sale(self):
+    total = Basket.objects.aggregate(TOTAL = Sum('amount'))['TOTAL']
+    return total
+
+
+def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Данные успешно сохранены.')
+            return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+    else:
+        form = UserProfileForm(instance=request.user)
+    context = {
+        'title': 'GS: Профиль',
+        'form': form,
+        'basket': Basket.objects.filter(user=request.user),
+        'basket_total': sum(item.product.price * item.quantity for item in Basket.objects.filter(user=request.user)),
+        'basket_wcount': sum(item.quantity for item in Basket.objects.filter(user=request.user)),
+    }
+    return render(request, 'users/profile.html', context)
