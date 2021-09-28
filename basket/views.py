@@ -1,5 +1,8 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
+from django.template.loader import render_to_string
+
 from products.models import Product
 from basket.models import Basket
 
@@ -25,3 +28,19 @@ def basket_add(request, product_id):
 def basket_remove(request, product_id):
     Basket.objects.get(id=product_id).delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def basket_edit(request, id, quantity):
+    if request.is_ajax():
+        basket = Basket.objects.get(id=id)
+        if quantity > 0:
+            basket.quantity = quantity
+            basket.save()
+        else:
+            basket.delete()
+    basket = Basket.objects.filter(user=request.user)
+    context = {
+        'basket': basket
+    }
+    result = render_to_string('basket/basket.html', context)
+    return JsonResponse({'result': result})
