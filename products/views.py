@@ -1,8 +1,5 @@
-import datetime
-import json
-import os.path
-
 from django.shortcuts import render
+
 from .models import Product, ProductCategory
 
 SITE_TITLE = 'geeks'
@@ -26,4 +23,3 @@ def products(request, code=None):
         'categories': ProductCategory.objects.all()
     }
     return render(request, 'products/products.html', context)
-

@@ -24,5 +24,4 @@ urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('', products, name='index'),
     path('<int:code>/', products, name='product'),
-
 ]

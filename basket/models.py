@@ -1,6 +1,7 @@
 from django.db import models
-from users.models import User
+
 from products.models import Product
+from users.models import User
 
 
 # Create your models here.
@@ -16,12 +17,13 @@ class Basket(models.Model):
     def __str__(self):
         return f'Корзина для {self.user.username} | Продукт {self.product.name}'
 
+    @property
     def sum(self):
         return self.quantity * self.product.price
 
     def total_sum(self):
         baskets = Basket.objects.filter(user=self.user)
-        return sum(basket.sum() for basket in baskets)
+        return sum(basket.sum for basket in baskets)
 
     def total_qty(self):
         baskets = Basket.objects.filter(user=self.user)
