@@ -1,13 +1,12 @@
-from django.contrib import auth, messages
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, FormView
+from django.views.generic import FormView
 
 from basket.models import Basket
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
-
 # Create your views here.
 from users.models import User
 
