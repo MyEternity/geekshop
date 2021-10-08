@@ -14,6 +14,18 @@ def index(request):
     return render(request, 'admins/admin.html')
 
 
+class ProductCreateView(CreateView, CustomDispatchMixin):
+    model = Product
+    template_name = 'admins/admin-products-create.html'
+    fields = ['name', 'description', 'price', 'quantity', 'category']
+    success_url = reverse_lazy('admins:products_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Панель управления / Создание товара'
+        return context
+
+
 class ProductsListView(ListView):
     model = Product
     template_name = 'admins/admin-products-list.html'
@@ -26,8 +38,8 @@ class ProductsListView(ListView):
 
 class ProductUpdateView(UpdateView, CustomDispatchMixin):
     model = Product
-    template_name = 'admins/admin-product-update-delete.html'
-    fields = ['name', 'description', 'price', 'quantity']
+    template_name = 'admins/admin-products-update-delete.html'
+    fields = ['name', 'description', 'price', 'quantity', 'category']
     success_url = reverse_lazy('admins:products_list')
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -38,8 +50,20 @@ class ProductUpdateView(UpdateView, CustomDispatchMixin):
 
 class ProductDeleteView(DeleteView, CustomDispatchMixin):
     model = Product
-    template_name = 'admins/admin-product-update-delete.html'
+    template_name = 'admins/admin-products-update-delete.html'
     success_url = reverse_lazy('admins:products_list')
+
+
+class ProductCategoriesCreateView(CreateView, CustomDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-categories-create.html'
+    fields = ['name', 'description']
+    success_url = reverse_lazy('admins:categories_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCategoriesCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Панель управления / Создание категории'
+        return context
 
 
 class ProductCategoriesListView(ListView):

@@ -13,6 +13,7 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                     <tr>
+                                        <th>Категория</th>
                                         <th>Наименование</th>
                                         <th>Описание</th>
                                         <th>Цена</th>
@@ -22,6 +23,8 @@
                                     <tbody>
                                     {% for item in object_list %}
                                         <tr>
+                                            <td><a href="{% url 'admins:category_update' item.category.id %}"
+                                                   style="color: dodgerblue">{{ item.category }}</a></td>
                                             <td><a href="{% url 'admins:product_update' item.id %}"
                                                    style="color: dodgerblue">{{ item.name }}</a></td>
                                             <td>{{ item.description }}</td>
