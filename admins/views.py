@@ -9,11 +9,32 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
 from geekshop.mixin import CustomDispatchMixin
+from products.models import Product, ProductCategory
 from users.models import User
 
 
 def index(request):
     return render(request, 'admins/admin.html')
+
+
+class ProductsListView(ListView):
+    model = Product
+    template_name = 'admins/admin-products-list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductsListView, self).get_context_data(**kwargs)
+        context['title'] = 'Панель управления / Товары'
+        return context
+
+
+class ProductCategoriesListView(ListView):
+    model = ProductCategory
+    template_name = 'admins/admin-categories-list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCategoriesListView, self).get_context_data(**kwargs)
+        context['title'] = 'Панель управления / Категории товаров'
+        return context
 
 
 class UserListView(ListView):
