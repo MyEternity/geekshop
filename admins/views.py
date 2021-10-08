@@ -27,6 +27,18 @@ class ProductsListView(ListView):
         return context
 
 
+class ProductUpdateView(UpdateView):
+    model = Product
+    template_name = 'admins/admin-product-update-delete.html'
+    # form_class = UserAdminProfileForm
+    success_url = reverse_lazy('admins:products_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Панель управления / Редактирование продукции'
+        return context
+
+
 class ProductCategoriesListView(ListView):
     model = ProductCategory
     template_name = 'admins/admin-categories-list.html'
