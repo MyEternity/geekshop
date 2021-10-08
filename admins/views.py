@@ -1,10 +1,7 @@
-from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
 # Create your views here.
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
@@ -27,16 +24,22 @@ class ProductsListView(ListView):
         return context
 
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(UpdateView, CustomDispatchMixin):
     model = Product
     template_name = 'admins/admin-product-update-delete.html'
-    # form_class = UserAdminProfileForm
+    fields = ['name', 'description', 'price', 'quantity']
     success_url = reverse_lazy('admins:products_list')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductUpdateView, self).get_context_data(**kwargs)
         context['title'] = 'Панель управления / Редактирование продукции'
         return context
+
+
+class ProductDeleteView(DeleteView, CustomDispatchMixin):
+    model = Product
+    template_name = 'admins/admin-product-update-delete.html'
+    success_url = reverse_lazy('admins:products_list')
 
 
 class ProductCategoriesListView(ListView):
@@ -47,6 +50,24 @@ class ProductCategoriesListView(ListView):
         context = super(ProductCategoriesListView, self).get_context_data(**kwargs)
         context['title'] = 'Панель управления / Категории товаров'
         return context
+
+
+class ProductCategoriesUpdateView(UpdateView, CustomDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-categories-update-delete.html'
+    fields = ['name', 'description']
+    success_url = reverse_lazy('admins:categories_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCategoriesUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Панель управления / Редактирование категорий'
+        return context
+
+
+class ProductCategoriesDeleteView(DeleteView, CustomDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-categories-update-delete.html'
+    success_url = reverse_lazy('admins:categories_list')
 
 
 class UserListView(ListView):
