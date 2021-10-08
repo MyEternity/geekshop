@@ -1,6 +1,5 @@
 from django import forms
 
-from products.models import Product
 from users.forms import UserRegisterForm, UserProfileForm
 from users.models import User
 
@@ -27,4 +26,3 @@ class UserAdminProfileForm(UserProfileForm):
         super(UserAdminProfileForm, self).__init__(*args, **kwargs)
         self.fields['username'].widget.attrs['readonly'] = False
         self.fields['email'].widget.attrs['readonly'] = False
-
