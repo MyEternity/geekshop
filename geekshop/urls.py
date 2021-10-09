@@ -18,14 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from products.views import index
+from products.views import IndexView
 
 app_name = 'main'
 
 urlpatterns = [
     path('admin/', admin.site.urls, name='admin'),
     path('admins/', include('admins.urls', namespace='admins')),
-    path('', index, name='index'),
+    path('', IndexView.as_view(), name='index'),
     path('products/', include('products.urls', namespace='products')),
     path('users/', include('users.urls', namespace='users')),
     path('basket/', include('basket.urls', namespace='basket')),
