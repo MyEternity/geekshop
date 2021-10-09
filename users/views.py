@@ -1,78 +1,63 @@
-from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, HttpResponseRedirect
-from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import FormView, UpdateView
 
 from basket.models import Basket
+from geekshop.mixin import UserActiveCheckMixin, BaseClassContextMixin
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
-
-
 # Create your views here.
+from users.models import User
 
 
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = auth.authenticate(username=username, password=password)
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-        else:
-            form = UserLoginForm(data=request.POST)
-    else:
-        form = UserLoginForm()
-    context = {
-        'title': 'GS: Авторизация',
-        'form': form
-    }
-    return render(request, 'users/login.html', context)
+class LoginListView(LoginView, BaseClassContextMixin):
+    template_name = 'users/login.html'
+    form_class = UserLoginForm
+    title = 'Авторизация'
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserRegisterForm(data=request.POST)
+class RegisterListView(FormView, BaseClassContextMixin):
+    model = User
+    template_name = 'users/register.html'
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('users:login')
+    title = 'Регистрация'
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Вы успешно зарегистрировались!')
-            return HttpResponseRedirect(reverse('users:login'))
-    else:
-        form = UserRegisterForm(data=request.POST)
-    context = {
-        'title': 'GS: Регистрация',
-        'form': form
-    }
-    return render(request, 'users/register.html', context)
+            return redirect(self.success_url)
+        messages.success(request, form.error_messages)
+        return redirect(self.success_url)
 
 
-@login_required
-def logout(request):
-    auth.logout(request)
-    return HttpResponseRedirect(reverse('index'))
+class Logout(LogoutView, BaseClassContextMixin, UserActiveCheckMixin):
+    template_name = 'products/index.html'
 
 
-def total_sale(self):
-    total = Basket.objects.aggregate(TOTAL=Sum('amount'))['TOTAL']
-    return total
+class ProfileFormView(UpdateView, UserActiveCheckMixin):
+    model = User
+    template_name = 'users/profile.html'
+    form_class = UserProfileForm
+    success_url = reverse_lazy('users:profile')
 
+    def get_object(self, queryset=None):
+        return get_object_or_404(User, pk=self.request.user.pk)
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+    def get_context_data(self, **kwargs):
+        context = super(ProfileFormView, self).get_context_data(**kwargs)
+        context['title'] = 'Профиль'
+        context['basket'] = Basket.objects.filter(user=self.request.user)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST, files=request.FILES, instance=self.get_object())
         if form.is_valid():
             form.save()
-            messages.success(request, 'Данные успешно сохранены.')
-            return HttpResponseRedirect(reverse('users:profile'))
-        else:
-            form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
-    else:
-        form = UserProfileForm(instance=request.user)
-    context = {
-        'title': 'GS: Профиль',
-        'form': form,
-        'basket': Basket.objects.filter(user=request.user),
-    }
-    return render(request, 'users/profile.html', context)
+            messages.success(request, 'Данные профиля успешно обновлены!')
+            return redirect(self.success_url)
+        messages.success(request, form.error_messages)
+        return redirect(self.success_url)
