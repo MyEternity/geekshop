@@ -37,7 +37,8 @@
                     {% else %}
                         {% if user.is_staff %}
                             <li class="nav-item">
-                                <a class="nav-link" href="admin">Система<i class="fa fa-cog fa-fw"></i></a>
+                                <a class="nav-link" href="{% url 'admins:index' %}">Система<i
+                                        class="fa fa-cog fa-fw"></i></a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
