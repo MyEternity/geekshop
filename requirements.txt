@@ -16,3 +16,4 @@ six==1.16.0
 urllib3==1.26.7
 Pillow==8.4.0
 python-dotenv==0.19.1
+social-auth-app-django==5.0.0
