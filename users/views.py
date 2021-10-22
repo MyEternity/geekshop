@@ -8,7 +8,7 @@ from django.views.generic import FormView, UpdateView
 from basket.models import Basket
 from geekshop import settings
 from geekshop.mixin import UserActiveCheckMixin, BaseClassContextMixin
-from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 # Create your views here.
 from users.models import User
 
@@ -60,7 +60,8 @@ class ProfileFormView(UpdateView, UserActiveCheckMixin):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST, files=request.FILES, instance=self.get_object())
-        if form.is_valid():
+        form_edit = UserProfileEditForm(data=request.POST, instance=request.users.userprofile)
+        if form.is_valid() and form_edit.is_valid():
             form.save()
             messages.success(request, 'Данные профиля успешно обновлены!')
             return redirect(self.success_url)
