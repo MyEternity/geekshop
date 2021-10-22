@@ -55,12 +55,13 @@ class ProfileFormView(UpdateView, UserActiveCheckMixin):
     def get_context_data(self, **kwargs):
         context = super(ProfileFormView, self).get_context_data(**kwargs)
         context['title'] = 'Профиль'
+        context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
         context['basket'] = Basket.objects.filter(user=self.request.user)
         return context
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(data=request.POST, files=request.FILES, instance=self.get_object())
-        form_edit = UserProfileEditForm(data=request.POST, instance=request.users.userprofile)
+        form_edit = UserProfileEditForm(data=request.POST, instance=request.user.userprofile)
         if form.is_valid() and form_edit.is_valid():
             form.save()
             messages.success(request, 'Данные профиля успешно обновлены!')

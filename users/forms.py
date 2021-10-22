@@ -70,8 +70,6 @@ class UserProfileForm(UserChangeForm):
 
 
 class UserProfileEditForm(forms.ModelForm):
-    image = forms.ImageField(widget=forms.FileInput())
-
     class Meta:
         model = UserProfile
         fields = ('tagline', 'about', 'gender')
