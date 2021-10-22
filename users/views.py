@@ -32,8 +32,10 @@ class RegisterListView(FormView, BaseClassContextMixin):
             user = form.save()
             if send_verification_link(user):
                 messages.success(request, 'Вы успешно зарегистрировались!')
-            return redirect(self.success_url)
-        messages.success(request, form.errors)
+                return redirect(self.success_url)
+            else:
+                messages.warning(request, 'Невозможно отправить почту, ошибка сайта. Обратитесь к администратору!')
+        messages.warning(request, form.errors)
         return redirect(self.success_url)
 
 
@@ -73,7 +75,12 @@ def send_verification_link(user):
     from django.core.mail import send_mail
     if settings.DEBUG:
         print(f'{settings.DOMAIN_NAME}{link}')
-    return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+    try:
+        return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+    except Exception as E:
+        print(E)
+        user.delete()
+        return False
 
 
 def verify(request, email, activation_key):
