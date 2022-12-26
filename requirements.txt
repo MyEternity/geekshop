@@ -4,7 +4,7 @@ sqlparse==0.4.2
 certifi==2022.12.7
 idna==3.3
 requests==2.26.0
-wheel==0.37.0
+wheel==0.38.1
 mssql-django==1.0
 django-smart-selects==1.5.9
 django-widget-tweaks==1.4.9
